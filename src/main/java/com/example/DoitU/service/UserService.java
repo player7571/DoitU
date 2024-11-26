@@ -48,11 +48,11 @@ public class UserService {
         User user = userRepository.findByUserId(userDto.getUserId())
                 .orElseThrow(() -> new RuntimeException("유저를 찾을 수 없음"));
 
-        if (!user.getPassword().equals(userDto.getPassword())) {
+        if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new BasicResponse(25, "잘못된 비밀번호입니다."));
         }
 
-        session.setAttribute("user", user); // 세션에 사용자 정보 저장
+        session.setAttribute("userId", user.getUserId()); // 사용자 ID만 저장
 
         return ResponseEntity.ok(new BasicResponse(200, "로그인 성공!"));
     }
