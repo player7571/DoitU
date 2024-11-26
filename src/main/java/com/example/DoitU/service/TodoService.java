@@ -35,7 +35,7 @@ public class TodoService {
         list.add(requestTodoDto.isSat());
         if(list.contains(true)){
             Routine routine = new Routine();
-            routine.setUser(userRepository.findByUserId(session.getId()).get());
+            routine.setUser(userRepository.findByUserId((String) session.getAttribute("userId")).get());
 //            routine.setUser(userRepository.findByUserId("asd123").get());
             routine.setTitle(requestTodoDto.getTitle());
             routine.setContent(requestTodoDto.getContent());
@@ -54,8 +54,7 @@ public class TodoService {
         }
         else {
             Todo todo = new Todo();
-            todo.setUser(userRepository.findByUserId(session.getId()).get());
-//            todo.setUser(userRepository.findByUserId("asd123").get());
+            todo.setUser(userRepository.findByUserId((String) session.getAttribute("userId")).get());
             todo.setTitle(requestTodoDto.getTitle());
             todo.setContent(requestTodoDto.getContent());
             todo.setColor(requestTodoDto.getColor());
@@ -69,16 +68,14 @@ public class TodoService {
 
     public ResponseEntity<?> getAllList(HttpSession session){
 
-        List<Todo> todoList = todoRepository.findByUserOrderByCreatedTimeDesc(userRepository.findByUserId(session.getId()).get());
-//        List<Todo> todoList = todoRepository.findByUserOrderByCreatedTimeDesc(userRepository.findByUserId("asd123").get());
+        List<Todo> todoList = todoRepository.findByUserOrderByCreatedTimeDesc(userRepository.findByUserId((String) session.getAttribute("userId")).get());
         List<todoDto> todoDto = new ArrayList<>();
         for (Todo todo : todoList) {
             com.example.DoitU.dto.todoDto dto = new todoDto(todo);
             todoDto.add(dto);
         }
 
-        List<Routine> routineList = routineRepository.findByUserOrderByCreatedTimeDesc(userRepository.findByUserId(session.getId()).get());
-//        List<Routine> routineList = routineRepository.findByUserOrderByCreatedTimeDesc(userRepository.findByUserId("asd123").get());
+        List<Routine> routineList = routineRepository.findByUserOrderByCreatedTimeDesc(userRepository.findByUserId((String) session.getAttribute("userId")).get());
         List<routineDto> routineDto = new ArrayList<>();
         for(Routine routine : routineList){
             com.example.DoitU.dto.routineDto dto = new routineDto(routine);
@@ -96,16 +93,14 @@ public class TodoService {
 
     public ResponseEntity<?> getList(boolean done, HttpSession session){
 
-        List<Todo> todoList = todoRepository.findByUserAndDoneOrderByCreatedTimeDesc(userRepository.findByUserId(session.getId()).get(), done);
-//        List<Todo> todoList = todoRepository.findByUserAndDoneOrderByCreatedTimeDesc(userRepository.findByUserId("asd123").get(), done);
+        List<Todo> todoList = todoRepository.findByUserAndDoneOrderByCreatedTimeDesc(userRepository.findByUserId((String) session.getAttribute("userId")).get(), done);
         List<todoDto> todoDto = new ArrayList<>();
         for (Todo todo : todoList) {
             com.example.DoitU.dto.todoDto dto = new todoDto(todo);
             todoDto.add(dto);
         }
 
-        List<Routine> routineList = routineRepository.findByUserOrderByCreatedTimeDesc(userRepository.findByUserId(session.getId()).get());
-//        List<Routine> routineList = routineRepository.findByUserOrderByCreatedTimeDesc(userRepository.findByUserId("asd123").get());
+        List<Routine> routineList = routineRepository.findByUserOrderByCreatedTimeDesc(userRepository.findByUserId((String) session.getAttribute("userId")).get());
         List<routineDto> routineDto = new ArrayList<>();
         for(Routine routine : routineList){
             com.example.DoitU.dto.routineDto dto = new routineDto(routine);
