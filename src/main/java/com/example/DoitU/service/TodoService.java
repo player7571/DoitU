@@ -94,4 +94,31 @@ public class TodoService {
         return ResponseEntity.ok(todoListDto);
     }
 
+    public ResponseEntity<?> getList(boolean done, HttpSession session){
+
+        List<Todo> todoList = todoRepository.findByUserAndDoneOrderByCreatedTimeDesc(userRepository.findByUserId(session.getId()).get(), done);
+//        List<Todo> todoList = todoRepository.findByUserAndDoneOrderByCreatedTimeDesc(userRepository.findByUserId("asd123").get(), done);
+        List<todoDto> todoDto = new ArrayList<>();
+        for (Todo todo : todoList) {
+            com.example.DoitU.dto.todoDto dto = new todoDto(todo);
+            todoDto.add(dto);
+        }
+
+        List<Routine> routineList = routineRepository.findByUserOrderByCreatedTimeDesc(userRepository.findByUserId(session.getId()).get());
+//        List<Routine> routineList = routineRepository.findByUserOrderByCreatedTimeDesc(userRepository.findByUserId("asd123").get());
+        List<routineDto> routineDto = new ArrayList<>();
+        for(Routine routine : routineList){
+            com.example.DoitU.dto.routineDto dto = new routineDto(routine);
+            routineDto.add(dto);
+        }
+
+        TodoListDto todoListDto = new TodoListDto();
+        todoListDto.setStatusCode(200);
+        todoListDto.setMsg("불러오기 성공!");
+        todoListDto.setTodoDto(todoDto);
+        todoListDto.setRoutineDto(routineDto);
+
+        return ResponseEntity.ok(todoListDto);
+    }
+
 }

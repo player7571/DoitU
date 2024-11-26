@@ -24,5 +24,15 @@ public class TodoController {
         return todoService.getAllList(session);
     }
 
+    @GetMapping("/WORKING")
+    public ResponseEntity<?> getWorkingTodolist(HttpSession session) {
+        return todoService.getList(false, session);
+    }
+
+    @GetMapping("/DONE")
+    public ResponseEntity<?> getDoneTodolist(HttpSession session) {
+        return todoService.getList(true, session);
+    }
+
 
 }
