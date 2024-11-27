@@ -4,6 +4,7 @@ import com.example.DoitU.dto.*;
 import com.example.DoitU.entity.Daily;
 import com.example.DoitU.entity.Routine;
 import com.example.DoitU.entity.Todo;
+import com.example.DoitU.entity.Week;
 import com.example.DoitU.repository.CalenderRepository;
 import com.example.DoitU.repository.RoutineRepository;
 import com.example.DoitU.repository.TodoRepository;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.ArrayList;
@@ -124,7 +126,19 @@ public class CalenderService {
             com.example.DoitU.dto.todoDto dto = new todoDto(todo);
             todoDto.add(dto);
         }
-        List<Routine> routineList = routineRepository.findByUserOrderByCreatedTimeDesc(userRepository.findByUserId((String) session.getAttribute("userId")).get());
+
+        DayOfWeek dayOfWeek = startDate.getDayOfWeek();
+        Week week = switch (dayOfWeek) {
+            case MONDAY -> Week.MON;
+            case TUESDAY -> Week.TUE;
+            case WEDNESDAY -> Week.WED;
+            case THURSDAY -> Week.THR;
+            case FRIDAY -> Week.FRI;
+            case SATURDAY -> Week.SAT;
+            case SUNDAY -> Week.SUN;
+        };
+
+        List<Routine> routineList = routineRepository.findByUserAndWeekListContainingOrderByCreatedTimeDesc(userRepository.findByUserId((String) session.getAttribute("userId")).get(), week);
         List<routineDto> routineDto = new ArrayList<>();
         for(Routine routine : routineList){
             com.example.DoitU.dto.routineDto dto = new routineDto(routine);
