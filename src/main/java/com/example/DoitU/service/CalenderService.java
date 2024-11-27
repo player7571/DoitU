@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -27,6 +28,34 @@ public class CalenderService {
     private final TodoRepository todoRepository;
     private final RoutineRepository routineRepository;
     private final CalenderRepository calenderRepository;
+
+    public ResponseEntity<?> setEmoji(@RequestBody EmojiDto emojiDto, HttpSession session) {
+        var val = calenderRepository.findByDayAndUser(emojiDto.getDate(), userRepository.findByUserId((String) session.getAttribute("userId")).get());
+        Daily daily = new Daily();
+        if(val.isPresent()){
+            daily = val.get();
+        }
+        else {
+            daily.setDay(emojiDto.getDate());
+        }
+        daily.setEmoji(emojiDto.getEmoji());
+        calenderRepository.save(daily);
+        return ResponseEntity.ok("작성 완료");
+    }
+
+    public ResponseEntity<?> setDiary(@RequestBody DiaryDto diaryDto, HttpSession session) {
+        var val = calenderRepository.findByDayAndUser(diaryDto.getDate(), userRepository.findByUserId((String) session.getAttribute("userId")).get());
+        Daily daily = new Daily();
+        if(val.isPresent()){
+            daily = val.get();
+        }
+        else {
+            daily.setDay(diaryDto.getDate());
+        }
+        daily.setEmoji(diaryDto.getDiary());
+        calenderRepository.save(daily);
+        return ResponseEntity.ok("작성 완료");
+    }
 
     public ResponseEntity<?> getInfo(int year, int month, HttpSession session){
 
