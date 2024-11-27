@@ -9,6 +9,7 @@ import com.example.DoitU.repository.TodoRepository;
 import com.example.DoitU.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -116,4 +117,23 @@ public class TodoService {
         return ResponseEntity.ok(todoListDto);
     }
 
+    public ResponseEntity<?> changeStatus(Long id) {
+        var val = todoRepository.findById(id);
+        if (val.isEmpty())
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new BasicResponse(500, "todo가 존재하지 않음"));
+        Todo todo = val.get();
+        todo.setDone(!todo.getDone());
+        todoRepository.save(todo);
+        return ResponseEntity.ok(new BasicResponse(200, "성공"));
+    }
+
+    public ResponseEntity<?> deleteTodo(Long id) {
+        todoRepository.deleteById(id);
+        return ResponseEntity.ok(new BasicResponse(200, "성공"));
+    }
+
+    public ResponseEntity<?> deleteRoutine(Long id) {
+        routineRepository.deleteById(id);
+        return ResponseEntity.ok(new BasicResponse(200, "성공"));
+    }
 }

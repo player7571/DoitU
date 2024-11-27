@@ -34,5 +34,20 @@ public class TodoController {
         return todoService.getList(true, session);
     }
 
+    @PostMapping("/done/{todoId}")
+    public ResponseEntity<?> doneCheck(@PathVariable Long todoId) {
+        return todoService.changeStatus(todoId);
+    }
+
+    @DeleteMapping("/todo/delete/{todoId}")
+    public ResponseEntity<?> deleteTodo(@PathVariable Long todoId) {
+        return todoService.deleteTodo(todoId);
+    }
+
+    @DeleteMapping("/routine/delete/{routineId}")
+    public ResponseEntity<?> deleteRoutine(@PathVariable Long routineId) {
+        return todoService.deleteRoutine(routineId);
+    }
+
 
 }
