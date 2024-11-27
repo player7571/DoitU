@@ -37,6 +37,7 @@ public class CalenderService {
         }
         else {
             daily.setDay(emojiDto.getDate());
+            daily.setUser(userRepository.findByUserId((String) session.getAttribute("userId")).get());
         }
         daily.setEmoji(emojiDto.getEmoji());
         calenderRepository.save(daily);
@@ -51,6 +52,7 @@ public class CalenderService {
         }
         else {
             daily.setDay(diaryDto.getDate());
+            daily.setUser(userRepository.findByUserId((String) session.getAttribute("userId")).get());
         }
         daily.setEmoji(diaryDto.getDiary());
         calenderRepository.save(daily);
