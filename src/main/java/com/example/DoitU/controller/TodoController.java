@@ -31,7 +31,7 @@ public class TodoController {
 
     @GetMapping("/DONE")
     public ResponseEntity<?> getDoneTodolist(HttpSession session) {
-        return todoService.getList(true, session);
+        return todoService.getTodoList(true, session);
     }
 
     @PostMapping("/done/{todoId}")
