@@ -56,7 +56,7 @@ public class CalenderService {
             daily.setDay(diaryDto.getDate());
             daily.setUser(userRepository.findByUserId((String) session.getAttribute("userId")).get());
         }
-        daily.setEmoji(diaryDto.getDiary());
+        daily.setDiary(diaryDto.getDiary());
         calenderRepository.save(daily);
         return ResponseEntity.ok("작성 완료");
     }
