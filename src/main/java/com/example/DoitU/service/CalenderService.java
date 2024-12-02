@@ -53,7 +53,7 @@ public class CalenderService {
             daily = val.get();
         }
         else {
-            daily.setDay(diaryDto.getDate());
+            daily.setDiary(diaryDto.getDate());
             daily.setUser(userRepository.findByUserId((String) session.getAttribute("userId")).get());
         }
         daily.setDiary(diaryDto.getDiary());
