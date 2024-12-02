@@ -117,6 +117,23 @@ public class TodoService {
         return ResponseEntity.ok(todoListDto);
     }
 
+    public ResponseEntity<?> getTodoList(boolean done, HttpSession session){
+
+        List<Todo> todoList = todoRepository.findByUserAndDoneOrderByCreatedTimeDesc(userRepository.findByUserId((String) session.getAttribute("userId")).get(), done);
+        List<todoDto> todoDto = new ArrayList<>();
+        for (Todo todo : todoList) {
+            com.example.DoitU.dto.todoDto dto = new todoDto(todo);
+            todoDto.add(dto);
+        }
+
+        TodoListDto todoListDto = new TodoListDto();
+        todoListDto.setStatusCode(200);
+        todoListDto.setMsg("불러오기 성공!");
+        todoListDto.setTodoDto(todoDto);
+
+        return ResponseEntity.ok(todoListDto);
+    }
+
     public ResponseEntity<?> changeStatus(Long id) {
         var val = todoRepository.findById(id);
         if (val.isEmpty())
